@@ -1,0 +1,58 @@
+title: "Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(p8105.datasets)
+
+library(plotly)
+
+```
+
+randomly select 1000 data as a new sample.
+
+```{r}
+data(instacart)
+instacart = instacart %>% 
+  sample_n(1000)
+```
+
+# barchart
+
+```{r barchart}
+instacart %>% 
+  count(department) %>% 
+  mutate(department = fct_reorder(department, n)) %>% 
+  plot_ly(x = ~department, y = ~n, color = ~department, type = "bar", colors = "viridis")
+```
+
+# boxplot
+
+```{r boxplot, message = FALSE}
+count_product = group_by(instacart, product_name, department) %>% 
+  summarize(sum_order_number = sum(order_number)) %>% 
+  mutate(department = fct_reorder(department, sum_order_number))
+  
+count_product %>% 
+  plot_ly(
+    x = ~department, y = ~sum_order_number, color = ~department , type = "box", colors = "viridis")
+```
+
+# scatterplot
+Since produce is has most sale in all department. In department produce, for each aisle, the scatterplot between product name and number of days since prior order.
+
+```{r scatter}
+instacart %>%
+  filter(department == "produce") %>% 
+  mutate(text_label = str_c("order id: ", order_id)) %>% 
+  plot_ly(
+    x = ~product_name, y = ~days_since_prior_order, z = ~aisle, type = "scatter3d", mode = "markers",
+    color = ~aisle, text = ~text_label, alpha = 0.8, colors = "viridis", size = 0.5) %>% 
+  layout(showlegend = TRUE, legend = list(font = list(size = 5)))
+```

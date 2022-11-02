@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>dashboard.knit</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="dashboard.html">Dashboard</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="Resume_Ziyan_Xu.pdf">Resume</a>
+</li>
+<li>
+  <a href="mailto:&lt;zx2373cumc.columbia.edu&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/zx2373/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<p>title: “Dashboard” output: flexdashboard::flex_dashboard:
+orientation: columns vertical_layout: fill source: embed —</p>
+<p>randomly select 1000 data as a new sample.</p>
+<pre class="r"><code>data(instacart)
+instacart = instacart %&gt;% 
+  sample_n(1000)</code></pre>
+<div id="barchart" class="section level1">
+<h1>barchart</h1>
+<pre class="r"><code>instacart %&gt;% 
+  count(department) %&gt;% 
+  mutate(department = fct_reorder(department, n)) %&gt;% 
+  plot_ly(x = ~department, y = ~n, color = ~department, type = &quot;bar&quot;, colors = &quot;viridis&quot;)</code></pre>
+<div id="htmlwidget-d19d237f1183c002b511" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d19d237f1183c002b511">{"x":{"visdat":{"f67836bf5e5a":["function () ","plotlyVisDat"]},"cur_data":"f67836bf5e5a","attrs":{"f67836bf5e5a":{"x":{},"y":{},"color":{},"colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"department","type":"category","categoryorder":"array","categoryarray":["other","missing","international","pets","babies","alcohol","personal care","household","meat seafood","breakfast","dry goods pasta","canned goods","deli","bakery","pantry","frozen","beverages","snacks","dairy eggs","produce"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"n"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["other"],"y":[1],"type":"bar","name":"other","marker":{"color":"rgba(68,1,84,1)","line":{"color":"rgba(68,1,84,1)"}},"textfont":{"color":"rgba(68,1,84,1)"},"error_y":{"color":"rgba(68,1,84,1)"},"error_x":{"color":"rgba(68,1,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["missing"],"y":[4],"type":"bar","name":"missing","marker":{"color":"rgba(72,21,103,1)","line":{"color":"rgba(72,21,103,1)"}},"textfont":{"color":"rgba(72,21,103,1)"},"error_y":{"color":"rgba(72,21,103,1)"},"error_x":{"color":"rgba(72,21,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["international"],"y":[5],"type":"bar","name":"international","marker":{"color":"rgba(72,38,119,1)","line":{"color":"rgba(72,38,119,1)"}},"textfont":{"color":"rgba(72,38,119,1)"},"error_y":{"color":"rgba(72,38,119,1)"},"error_x":{"color":"rgba(72,38,119,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["pets"],"y":[5],"type":"bar","name":"pets","marker":{"color":"rgba(69,55,129,1)","line":{"color":"rgba(69,55,129,1)"}},"textfont":{"color":"rgba(69,55,129,1)"},"error_y":{"color":"rgba(69,55,129,1)"},"error_x":{"color":"rgba(69,55,129,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["babies"],"y":[6],"type":"bar","name":"babies","marker":{"color":"rgba(63,71,136,1)","line":{"color":"rgba(63,71,136,1)"}},"textfont":{"color":"rgba(63,71,136,1)"},"error_y":{"color":"rgba(63,71,136,1)"},"error_x":{"color":"rgba(63,71,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["alcohol"],"y":[8],"type":"bar","name":"alcohol","marker":{"color":"rgba(57,85,140,1)","line":{"color":"rgba(57,85,140,1)"}},"textfont":{"color":"rgba(57,85,140,1)"},"error_y":{"color":"rgba(57,85,140,1)"},"error_x":{"color":"rgba(57,85,140,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["personal care"],"y":[15],"type":"bar","name":"personal care","marker":{"color":"rgba(50,100,142,1)","line":{"color":"rgba(50,100,142,1)"}},"textfont":{"color":"rgba(50,100,142,1)"},"error_y":{"color":"rgba(50,100,142,1)"},"error_x":{"color":"rgba(50,100,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["household"],"y":[22],"type":"bar","name":"household","marker":{"color":"rgba(45,113,142,1)","line":{"color":"rgba(45,113,142,1)"}},"textfont":{"color":"rgba(45,113,142,1)"},"error_y":{"color":"rgba(45,113,142,1)"},"error_x":{"color":"rgba(45,113,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["meat seafood"],"y":[22],"type":"bar","name":"meat seafood","marker":{"color":"rgba(40,125,142,1)","line":{"color":"rgba(40,125,142,1)"}},"textfont":{"color":"rgba(40,125,142,1)"},"error_y":{"color":"rgba(40,125,142,1)"},"error_x":{"color":"rgba(40,125,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["breakfast"],"y":[25],"type":"bar","name":"breakfast","marker":{"color":"rgba(35,138,141,1)","line":{"color":"rgba(35,138,141,1)"}},"textfont":{"color":"rgba(35,138,141,1)"},"error_y":{"color":"rgba(35,138,141,1)"},"error_x":{"color":"rgba(35,138,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["dry goods pasta"],"y":[26],"type":"bar","name":"dry goods pasta","marker":{"color":"rgba(31,150,139,1)","line":{"color":"rgba(31,150,139,1)"}},"textfont":{"color":"rgba(31,150,139,1)"},"error_y":{"color":"rgba(31,150,139,1)"},"error_x":{"color":"rgba(31,150,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["canned goods"],"y":[30],"type":"bar","name":"canned goods","marker":{"color":"rgba(32,163,134,1)","line":{"color":"rgba(32,163,134,1)"}},"textfont":{"color":"rgba(32,163,134,1)"},"error_y":{"color":"rgba(32,163,134,1)"},"error_x":{"color":"rgba(32,163,134,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["deli"],"y":[30],"type":"bar","name":"deli","marker":{"color":"rgba(41,175,127,1)","line":{"color":"rgba(41,175,127,1)"}},"textfont":{"color":"rgba(41,175,127,1)"},"error_y":{"color":"rgba(41,175,127,1)"},"error_x":{"color":"rgba(41,175,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["bakery"],"y":[37],"type":"bar","name":"bakery","marker":{"color":"rgba(60,187,117,1)","line":{"color":"rgba(60,187,117,1)"}},"textfont":{"color":"rgba(60,187,117,1)"},"error_y":{"color":"rgba(60,187,117,1)"},"error_x":{"color":"rgba(60,187,117,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["pantry"],"y":[61],"type":"bar","name":"pantry","marker":{"color":"rgba(86,198,103,1)","line":{"color":"rgba(86,198,103,1)"}},"textfont":{"color":"rgba(86,198,103,1)"},"error_y":{"color":"rgba(86,198,103,1)"},"error_x":{"color":"rgba(86,198,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["frozen"],"y":[84],"type":"bar","name":"frozen","marker":{"color":"rgba(116,208,85,1)","line":{"color":"rgba(116,208,85,1)"}},"textfont":{"color":"rgba(116,208,85,1)"},"error_y":{"color":"rgba(116,208,85,1)"},"error_x":{"color":"rgba(116,208,85,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["beverages"],"y":[85],"type":"bar","name":"beverages","marker":{"color":"rgba(148,216,64,1)","line":{"color":"rgba(148,216,64,1)"}},"textfont":{"color":"rgba(148,216,64,1)"},"error_y":{"color":"rgba(148,216,64,1)"},"error_x":{"color":"rgba(148,216,64,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["snacks"],"y":[88],"type":"bar","name":"snacks","marker":{"color":"rgba(184,222,41,1)","line":{"color":"rgba(184,222,41,1)"}},"textfont":{"color":"rgba(184,222,41,1)"},"error_y":{"color":"rgba(184,222,41,1)"},"error_x":{"color":"rgba(184,222,41,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["dairy eggs"],"y":[166],"type":"bar","name":"dairy eggs","marker":{"color":"rgba(220,227,24,1)","line":{"color":"rgba(220,227,24,1)"}},"textfont":{"color":"rgba(220,227,24,1)"},"error_y":{"color":"rgba(220,227,24,1)"},"error_x":{"color":"rgba(220,227,24,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["produce"],"y":[280],"type":"bar","name":"produce","marker":{"color":"rgba(253,231,37,1)","line":{"color":"rgba(253,231,37,1)"}},"textfont":{"color":"rgba(253,231,37,1)"},"error_y":{"color":"rgba(253,231,37,1)"},"error_x":{"color":"rgba(253,231,37,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="boxplot" class="section level1">
+<h1>boxplot</h1>
+<pre class="r"><code>count_product = group_by(instacart, product_name, department) %&gt;% 
+  summarize(sum_order_number = sum(order_number)) %&gt;% 
+  mutate(department = fct_reorder(department, sum_order_number))
+  
+count_product %&gt;% 
+  plot_ly(
+    x = ~department, y = ~sum_order_number, color = ~department , type = &quot;box&quot;, colors = &quot;viridis&quot;)</code></pre>
+<div id="htmlwidget-d9900927e0a10280abb2" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d9900927e0a10280abb2">{"x":{"visdat":{"f678574f8894":["function () ","plotlyVisDat"]},"cur_data":"f678574f8894","attrs":{"f678574f8894":{"x":{},"y":{},"color":{},"colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"department","type":"category","categoryorder":"array","categoryarray":["beverages","dairy eggs","snacks","household","bakery","alcohol","pantry","meat seafood","dry goods pasta","canned goods","breakfast","produce","babies","frozen","deli","personal care","pets","international","missing","other"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"sum_order_number"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"fillcolor":"rgba(68,1,84,0.5)","x":["beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages","beverages"],"y":[6,5,13,4,30,11,18,6,4,12,5,32,6,6,4,31,41,5,22,17,8,47,5,9,7,7,4,34,11,21,43,9,7,5,14,5,6,15,9,4,26,14,12,8,4,17,4,15,29,14,9,11,31,46,7,31,14,8,25,6,25,43,154,4,110,21,6,45,32,11,65,4,4,10,7],"type":"box","name":"beverages","marker":{"color":"rgba(68,1,84,1)","line":{"color":"rgba(68,1,84,1)"}},"line":{"color":"rgba(68,1,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(72,21,103,0.5)","x":["dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs","dairy eggs"],"y":[19,6,8,25,49,4,4,7,8,6,24,53,5,8,6,37,11,15,4,52,57,4,16,4,13,100,25,6,5,7,31,7,9,17,4,28,13,4,14,21,13,8,10,12,15,5,43,21,13,5,15,14,25,12,42,31,4,28,61,19,19,12,61,5,38,9,36,10,92,12,6,8,5,19,5,6,7,4,44,15,5,37,23,5,7,35,7,13,54,7,40,20,9,71,65,25,4,4,33,5,41,9,20,4,63,21,7,15,47,26,12,23,6,18,5,17,5,15,7,96,36,31,67,28,44,97,6,26,12,37,4,10,51,16,10,4,20],"type":"box","name":"dairy eggs","marker":{"color":"rgba(72,21,103,1)","line":{"color":"rgba(72,21,103,1)"}},"line":{"color":"rgba(72,21,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(72,38,119,0.5)","x":["snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks","snacks"],"y":[57,8,56,9,9,6,12,19,7,19,32,12,5,13,15,31,7,43,9,13,13,13,9,43,16,25,20,5,37,13,8,30,65,10,7,4,10,6,11,5,13,17,20,75,4,14,11,88,11,17,10,9,10,57,36,11,40,7,6,4,20,13,10,25,16,5,7,4,4,10,44,58,84,4,21,7,11,10,12,15,35,8,15],"type":"box","name":"snacks","marker":{"color":"rgba(72,38,119,1)","line":{"color":"rgba(72,38,119,1)"}},"line":{"color":"rgba(72,38,119,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(69,55,129,0.5)","x":["household","household","household","household","household","household","household","household","household","household","household","household","household","household","household","household","household","household","household","household","household","household"],"y":[5,5,4,35,10,12,40,39,6,10,60,67,7,38,9,4,4,23,6,20,7,14],"type":"box","name":"household","marker":{"color":"rgba(69,55,129,1)","line":{"color":"rgba(69,55,129,1)"}},"line":{"color":"rgba(69,55,129,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(63,71,136,0.5)","x":["bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery","bakery"],"y":[6,5,20,13,18,16,4,11,13,7,6,9,36,25,37,4,28,7,24,6,10,6,54,11,27,15,6,6,50,5,9,4,17,4,7,14],"type":"box","name":"bakery","marker":{"color":"rgba(63,71,136,1)","line":{"color":"rgba(63,71,136,1)"}},"line":{"color":"rgba(63,71,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(57,85,140,0.5)","x":["alcohol","alcohol","alcohol","alcohol","alcohol","alcohol","alcohol","alcohol"],"y":[14,9,4,12,39,11,25,26],"type":"box","name":"alcohol","marker":{"color":"rgba(57,85,140,1)","line":{"color":"rgba(57,85,140,1)"}},"line":{"color":"rgba(57,85,140,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(50,100,142,0.5)","x":["pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry","pantry"],"y":[4,64,12,13,5,42,15,10,18,21,7,49,14,7,11,23,10,6,20,9,4,21,20,11,12,38,11,62,10,5,25,46,7,6,22,7,5,12,17,5,21,19,5,8,6,4,4,57,4,23,11,23,8,26,58,8],"type":"box","name":"pantry","marker":{"color":"rgba(50,100,142,1)","line":{"color":"rgba(50,100,142,1)"}},"line":{"color":"rgba(50,100,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(45,113,142,0.5)","x":["meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood","meat seafood"],"y":[54,23,7,14,107,57,4,10,5,16,7,6,17,25,13,21,36,32],"type":"box","name":"meat seafood","marker":{"color":"rgba(45,113,142,1)","line":{"color":"rgba(45,113,142,1)"}},"line":{"color":"rgba(45,113,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(40,125,142,0.5)","x":["dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta","dry goods pasta"],"y":[5,5,4,45,5,7,5,5,6,6,6,38,33,13,54,18,16,5,22,48,10,7,6,8,10,6],"type":"box","name":"dry goods pasta","marker":{"color":"rgba(40,125,142,1)","line":{"color":"rgba(40,125,142,1)"}},"line":{"color":"rgba(40,125,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(35,138,141,0.5)","x":["canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods","canned goods"],"y":[6,7,9,5,6,8,15,4,7,10,6,38,6,13,7,22,5,32,8,12,10,4,4,11,37,6,9,25,8,56],"type":"box","name":"canned goods","marker":{"color":"rgba(35,138,141,1)","line":{"color":"rgba(35,138,141,1)"}},"line":{"color":"rgba(35,138,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(31,150,139,0.5)","x":["breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast","breakfast"],"y":[4,10,8,8,4,7,32,12,8,26,6,8,11,9,7,4,29,7,18,15,24,35,38],"type":"box","name":"breakfast","marker":{"color":"rgba(31,150,139,1)","line":{"color":"rgba(31,150,139,1)"}},"line":{"color":"rgba(31,150,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(32,163,134,0.5)","x":["produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce","produce"],"y":[69,4,5,21,88,4,24,254,260,25,21,13,23,13,6,26,47,4,108,38,17,30,10,6,12,9,61,12,5,56,73,43,20,37,5,44,26,66,6,27,7,21,98,9,4,45,68,4,26,112,24,10,11,38,15,171,94,4,14,35,25,40,29,128,22,8,7,5,4,20,9,9,100,8,79,67,12,11,10,81,4,4,17,91,19,13,30,4,48,7,5,18,24,41,9,27,8,56,69,14,17,8,72,39,6,13,188,7,4,5,13,93,19,18,103,31,22,92,16,50,6,9,16,7,14,21,113,8,23,4,19,22,8,6,22,13,4,39,87,12,94,4,7,6,7,7,41,69,24,8],"type":"box","name":"produce","marker":{"color":"rgba(32,163,134,1)","line":{"color":"rgba(32,163,134,1)"}},"line":{"color":"rgba(32,163,134,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(41,175,127,0.5)","x":["babies","babies","babies","babies","babies","babies"],"y":[7,5,5,13,8,5],"type":"box","name":"babies","marker":{"color":"rgba(41,175,127,1)","line":{"color":"rgba(41,175,127,1)"}},"line":{"color":"rgba(41,175,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(60,187,117,0.5)","x":["frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen","frozen"],"y":[11,4,5,6,49,12,36,6,18,15,5,6,4,5,29,17,33,5,12,14,21,6,11,7,8,6,12,4,19,6,13,7,21,21,7,8,13,4,8,21,38,16,24,4,10,6,9,5,24,6,6,6,7,17,5,4,24,18,6,30,10,14,14,9,14,62,36,11,7,4,6,10,4,27,6,8],"type":"box","name":"frozen","marker":{"color":"rgba(60,187,117,1)","line":{"color":"rgba(60,187,117,1)"}},"line":{"color":"rgba(60,187,117,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(86,198,103,0.5)","x":["deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli","deli"],"y":[4,7,17,23,14,30,39,17,4,50,15,9,13,126,7,75,54,14,9,8,11,10,8,18],"type":"box","name":"deli","marker":{"color":"rgba(86,198,103,1)","line":{"color":"rgba(86,198,103,1)"}},"line":{"color":"rgba(86,198,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(116,208,85,0.5)","x":["personal care","personal care","personal care","personal care","personal care","personal care","personal care","personal care","personal care","personal care","personal care","personal care","personal care","personal care","personal care"],"y":[8,4,11,23,7,9,10,4,6,13,9,14,12,26,30],"type":"box","name":"personal care","marker":{"color":"rgba(116,208,85,1)","line":{"color":"rgba(116,208,85,1)"}},"line":{"color":"rgba(116,208,85,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(148,216,64,0.5)","x":["pets","pets","pets","pets","pets"],"y":[17,5,14,19,14],"type":"box","name":"pets","marker":{"color":"rgba(148,216,64,1)","line":{"color":"rgba(148,216,64,1)"}},"line":{"color":"rgba(148,216,64,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(184,222,41,0.5)","x":["international","international","international","international","international"],"y":[15,6,18,5,31],"type":"box","name":"international","marker":{"color":"rgba(184,222,41,1)","line":{"color":"rgba(184,222,41,1)"}},"line":{"color":"rgba(184,222,41,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(220,227,24,0.5)","x":["missing","missing","missing","missing"],"y":[44,6,7,10],"type":"box","name":"missing","marker":{"color":"rgba(220,227,24,1)","line":{"color":"rgba(220,227,24,1)"}},"line":{"color":"rgba(220,227,24,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(253,231,37,0.5)","x":["other"],"y":[7],"type":"box","name":"other","marker":{"color":"rgba(253,231,37,1)","line":{"color":"rgba(253,231,37,1)"}},"line":{"color":"rgba(253,231,37,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="scatterplot" class="section level1">
+<h1>scatterplot</h1>
+<p>Since produce is has most sale in all department. In department
+produce, for each aisle, the scatterplot between product name and number
+of days since prior order.</p>
+<pre class="r"><code>instacart %&gt;%
+  filter(department == &quot;produce&quot;) %&gt;% 
+  mutate(text_label = str_c(&quot;order id: &quot;, order_id)) %&gt;% 
+  plot_ly(
+    x = ~product_name, y = ~days_since_prior_order, z = ~aisle, type = &quot;scatter3d&quot;, mode = &quot;markers&quot;,
+    color = ~aisle, text = ~text_label, alpha = 0.8, colors = &quot;viridis&quot;, size = 0.5) %&gt;% 
+  layout(showlegend = TRUE, legend = list(font = list(size = 5)))</code></pre>
+<div id="htmlwidget-2c8ff34fb8caf1a64696" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2c8ff34fb8caf1a64696">{"x":{"visdat":{"f6782e052d93":["function () ","plotlyVisDat"]},"cur_data":"f6782e052d93","attrs":{"f6782e052d93":{"x":{},"y":{},"z":{},"mode":"markers","text":{},"color":{},"size":0.5,"colors":"viridis","alpha":0.8,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"showlegend":true,"legend":{"font":{"size":5}},"scene":{"xaxis":{"title":"product_name"},"yaxis":{"title":"days_since_prior_order"},"zaxis":{"title":"aisle"}},"xaxis":{"type":"category","categoryorder":"array","categoryarray":["Apple Honeycrisp Organic","Artichokes","Asparation/Broccolini/Baby Broccoli","Baby Cucumbers","Baby Spinach","Baby Spring Mix","Bag of Oranges","Bag of Organic Bananas","Banana","Bartlett Pears","Bicolor Sweet Corn","Black Plum","Blackberries","Blood Oranges","Blueberry Pint","Broccoli Crown","Bunched Cilantro","Campari Tomato","Cantaloupe","Carrots","Cauliflower Florets","Celery Heart","Cherubs Heavenly Salad Tomatoes","Citrus Mandarins Organic","Diced Red Onions","Dressing, Jersey Sweet Onion, Calorie Free","English Seedless Cucumber","Fresh Cauliflower","Fresh Spinach","Garlic","Gold Potato","Granny Smith Apples","Green Beans","Green Bell Pepper","Green Onions","Hass Avocado","Hass Avocados","Honeycrisp Apple","Honeydew Melon","Jalapeno Peppers","Kale Greens","Kumato Tomatoes","Large Lemon","Leafy Green Romaine Lettuce","Lemon","Lime","Limes","Mini Cucumbers","Orange Bell Pepper","Organic Avocado","Organic Baby Arugula","Organic Baby Bella Mushrooms","Organic Baby Broccoli","Organic Baby Carrots","Organic Baby Rainbow Carrots","Organic Baby Spinach","Organic Banana","Organic Bartlett Pear","Organic Basil","Organic Blackberries","Organic Blueberries","Organic Broccoli","Organic Broccoli Crown","Organic Broccoli Crowns","Organic Bunch Beets","Organic Butternut Squash","Organic Carrot Bunch","Organic Cherries","Organic Cilantro","Organic Cripps Pink Apples","Organic Cucumber","Organic Dill","Organic Fuji Apple","Organic Fuji Apples","Organic Gala Apples","Organic Garlic","Organic Garnet Sweet Potato (Yam)","Organic Ginger Root","Organic Granny Smith Apple","Organic Grape Tomatoes","Organic Green Kale","Organic Green Onions","Organic Green Seedless Grapes","Organic Hass Avocado","Organic Hothouse Cucumbers","Organic Iceberg Lettuce","Organic Italian Parsley Bunch","Organic Jalapeno Pepper","Organic Lacinato (Dinosaur) Kale","Organic Large Extra Fancy Fuji Apple","Organic Leek","Organic Mustard Greens","Organic Navel Orange","Organic Peeled Whole Baby Carrots","Organic Premium Sweet Petite Mini Peeled Carrots","Organic Raspberries","Organic Red Kale","Organic Red Onion","Organic Romaine","Organic Romaine Lettuce","Organic Rosemary","Organic Russet Potato","Organic Small Bunch Celery","Organic Snipped Green Beans","Organic Spaghetti Squash","Organic Spinach Bunch","Organic Strawberries","Organic Sugar Snap Peas","Organic Sweet Pea","Organic Tarragon","Organic Tomato Cluster","Organic Yellow Onion","Organic Yellow Onions","Organic Yellow Peaches","Organic Zucchini","Packaged Grape Tomatoes","Parsley, Italian (Flat), New England Grown","Peeled Shallots","Pepper Greens","Pomegranate Arils","Potato Yukon Gold Organic","Potted Basil","Rainbow Bell Peppers","Rainier Cherries","Raspberries","Red Onion","Red Peppers","Red Raspberries","Red Seedless Grapes","Red Swisschard","Red Vine Tomato","Roma Tomato","Romaine Hearts","Russet Potatoes","Seedless Red Grapes","Seedless Watermelon","Shredded Iceberg Lettuce","Sinfully Sweet Campari Tomatoes","Small Hass Avocado","Spinach and Arugula Salad","Strawberries","Super Spinach! Baby Spinach, Baby Bok Choy, Sweet Baby Kale","Sweet Apple Slices","Sweet Grape Tomatoes","Tommy/Kent/Keitt/Haden Mango","Vegetable Tray With Low Fat Dressing","White Onion","Whole White Mushrooms","Yellow Onions","Zucchini Squash"]},"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Bartlett Pears","Organic Fuji Apple","Organic Avocado","Seedless Watermelon","Large Lemon","Strawberries","Honeycrisp Apple","Cantaloupe","Strawberries","Organic Avocado","Organic Strawberries","Bag of Organic Bananas","Organic Strawberries","Organic Strawberries","Banana","Citrus Mandarins Organic","Organic Strawberries","Banana","Organic Yellow Peaches","Apple Honeycrisp Organic","Banana","Organic Avocado","Blueberry Pint","Organic Avocado","Bag of Organic Bananas","Large Lemon","Organic Hass Avocado","Apple Honeycrisp Organic","Strawberries","Large Lemon","Bag of Organic Bananas","Banana","Strawberries","Organic Blackberries","Banana","Organic Hass Avocado","Cantaloupe","Organic Banana","Lime","Small Hass Avocado","Tommy/Kent/Keitt/Haden Mango","Honeycrisp Apple","Organic Strawberries","Organic Strawberries","Organic Navel Orange","Bag of Oranges","Blood Oranges","Red Seedless Grapes","Large Lemon","Limes","Banana","Banana","Organic Blackberries","Banana","Apple Honeycrisp Organic","Organic Large Extra Fancy Fuji Apple","Bag of Organic Bananas","Banana","Organic Cripps Pink Apples","Organic Mustard Greens","Bag of Organic Bananas","Organic Hass Avocado","Limes","Bag of Organic Bananas","Large Lemon","Banana","Large Lemon","Small Hass Avocado","Granny Smith Apples","Large Lemon","Bag of Organic Bananas","Organic Avocado","Rainier Cherries","Limes","Organic Gala Apples","Organic Granny Smith Apple","Black Plum","Bag of Organic Bananas","Large Lemon","Organic Banana","Organic Banana","Limes","Granny Smith Apples","Bag of Organic Bananas","Small Hass Avocado","Organic Strawberries","Organic Strawberries","Organic Bartlett Pear","Organic Strawberries","Granny Smith Apples","Banana","Blackberries","Lime","Bag of Organic Bananas","Bag of Organic Bananas","Banana","Bag of Organic Bananas","Organic Strawberries","Organic Fuji Apples","Cantaloupe","Honeydew Melon","Organic Gala Apples"],"y":[8,4,7,7,14,21,11,30,5,26,3,21,23,16,6,21,3,30,24,30,2,30,18,6,6,30,27,30,30,5,8,4,30,3,30,3,6,6,26,7,19,2,4,8,8,4,8,7,5,14,12,26,6,30,4,30,4,30,8,6,17,30,6,11,22,30,13,4,30,30,9,17,15,15,7,10,14,11,30,7,14,6,6,26,6,12,6,14,7,18,8,15,14,22,7,30,11,30,19,5,17,20],"z":["fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits","fresh fruits"],"mode":"markers","text":["order id: 102217","order id: 569910","order id: 429796","order id: 1562155","order id: 3311894","order id: 2505640","order id: 971665","order id: 912031","order id: 731932","order id: 1806863","order id: 1117693","order id: 1500468","order id: 2181488","order id: 2634450","order id: 1567186","order id: 67541","order id: 89811","order id: 331270","order id: 73902","order id: 888970","order id: 3184000","order id: 1917568","order id: 285589","order id: 2983609","order id: 1049550","order id: 1454331","order id: 1086327","order id: 299786","order id: 1422894","order id: 2858677","order id: 440991","order id: 2619077","order id: 2799829","order id: 751864","order id: 2686306","order id: 2408005","order id: 1955092","order id: 1373039","order id: 743125","order id: 1359620","order id: 2214202","order id: 560372","order id: 2462551","order id: 805987","order id: 321596","order id: 2629375","order id: 2658380","order id: 1936849","order id: 3062683","order id: 2146570","order id: 2422380","order id: 2753885","order id: 586478","order id: 1115098","order id: 876988","order id: 102247","order id: 1625341","order id: 1710768","order id: 98455","order id: 1049550","order id: 902452","order id: 3357626","order id: 207977","order id: 1822058","order id: 1707719","order id: 1737585","order id: 787446","order id: 2006858","order id: 807108","order id: 1650161","order id: 236278","order id: 823320","order id: 34402","order id: 2954604","order id: 3134337","order id: 2465829","order id: 3114563","order id: 2442890","order id: 762473","order id: 2267134","order id: 800586","order id: 2232651","order id: 282974","order id: 3358701","order id: 2756824","order id: 1104379","order id: 1505470","order id: 2420001","order id: 1405458","order id: 2295333","order id: 972197","order id: 3246355","order id: 280549","order id: 244143","order id: 1318937","order id: 1162009","order id: 2868483","order id: 2977448","order id: 2108451","order id: 2839421","order id: 2262274","order id: 1731351"],"type":"scatter3d","name":"fresh fruits","marker":{"color":"rgba(68,1,84,0.8)","size":[55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55],"sizemode":"area","line":{"color":"rgba(68,1,84,1)"}},"textfont":{"color":"rgba(68,1,84,0.8)","size":55},"error_y":{"color":"rgba(68,1,84,0.8)","width":55},"error_x":{"color":"rgba(68,1,84,0.8)","width":55},"line":{"color":"rgba(68,1,84,0.8)","width":55},"frame":null},{"x":["Bunched Cilantro","Organic Italian Parsley Bunch","Organic Rosemary","Organic Rosemary","Organic Dill","Organic Tarragon","Organic Cilantro","Parsley, Italian (Flat), New England Grown","Organic Basil","Bunched Cilantro","Potted Basil"],"y":[3,13,30,12,24,30,4,9,30,30,28],"z":["fresh herbs","fresh herbs","fresh herbs","fresh herbs","fresh herbs","fresh herbs","fresh herbs","fresh herbs","fresh herbs","fresh herbs","fresh herbs"],"mode":"markers","text":["order id: 3089428","order id: 1506598","order id: 1455404","order id: 1855738","order id: 62378","order id: 2256647","order id: 395920","order id: 1379385","order id: 1762556","order id: 807037","order id: 1869676"],"type":"scatter3d","name":"fresh herbs","marker":{"color":"rgba(59,82,139,0.8)","size":[55,55,55,55,55,55,55,55,55,55,55],"sizemode":"area","line":{"color":"rgba(59,82,139,1)"}},"textfont":{"color":"rgba(59,82,139,0.8)","size":55},"error_y":{"color":"rgba(59,82,139,0.8)","width":55},"error_x":{"color":"rgba(59,82,139,0.8)","width":55},"line":{"color":"rgba(59,82,139,0.8)","width":55},"frame":null},{"x":["Organic Broccoli Crowns","Organic Yellow Onion","Red Swisschard","Russet Potatoes","Organic Broccoli","Organic Lacinato (Dinosaur) Kale","Organic Romaine Lettuce","Dressing, Jersey Sweet Onion, Calorie Free","Green Onions","Organic Sugar Snap Peas","Red Vine Tomato","Roma Tomato","Organic Yellow Onion","Organic Yellow Onion","Roma Tomato","Organic Snipped Green Beans","Kumato Tomatoes","Organic Hothouse Cucumbers","Organic Red Onion","Organic Green Kale","Organic Yellow Onions","Organic Cucumber","White Onion","Organic Garnet Sweet Potato (Yam)","Jalapeno Peppers","Organic Yellow Onion","Organic Zucchini","Organic Broccoli Crown","Red Vine Tomato","Kale Greens","Gold Potato","Organic Zucchini","Hass Avocado","Organic Russet Potato","Organic Tomato Cluster","Garlic","Organic Red Onion","Organic Jalapeno Pepper","Organic Lacinato (Dinosaur) Kale","Organic Small Bunch Celery","Organic Ginger Root","Hass Avocado","Organic Leek","Sweet Grape Tomatoes","Organic Broccoli Crowns","English Seedless Cucumber","Red Peppers","Cherubs Heavenly Salad Tomatoes","Organic Yellow Onion","Carrots","Organic Cucumber","Potato Yukon Gold Organic","Asparation/Broccolini/Baby Broccoli","Organic Zucchini","Organic Broccoli Crowns","Organic Yellow Onion","Red Peppers","Organic Zucchini","Organic Red Onion","Yellow Onions","Organic Yellow Onion","Organic Small Bunch Celery","Organic Hothouse Cucumbers","Yellow Onions","Organic Spaghetti Squash","Organic Spinach Bunch","Artichokes","Organic Snipped Green Beans","Organic Red Onion","Green Bell Pepper","Organic Bunch Beets","Garlic","Carrots","Organic Romaine Lettuce","Organic Zucchini","Carrots","Organic Zucchini","Campari Tomato","Bicolor Sweet Corn","Green Bell Pepper","Red Vine Tomato","Red Onion","Broccoli Crown","Sinfully Sweet Campari Tomatoes","Green Beans","Organic Tomato Cluster","Organic Baby Broccoli","Orange Bell Pepper","Broccoli Crown","Red Peppers","Zucchini Squash","Jalapeno Peppers","Organic Carrot Bunch","Organic Red Kale","White Onion","Organic Garlic","Fresh Cauliflower","Organic Red Onion","Organic Iceberg Lettuce","Orange Bell Pepper","Diced Red Onions","Organic Butternut Squash","Cherubs Heavenly Salad Tomatoes","Organic Broccoli","Garlic","Organic Yellow Onion","Organic Green Onions","Garlic"],"y":[8,27,2,30,30,4,30,14,30,11,30,30,7,30,14,13,23,7,9,16,27,6,8,30,13,22,6,7,30,16,1,30,7,30,30,30,13,11,9,7,7,4,30,17,5,3,5,21,30,30,7,30,30,7,8,8,1,8,30,22,13,4,8,3,18,11,10,30,30,2,11,10,30,30,30,13,7,21,30,6,4,14,9,5,21,5,30,12,5,30,7,10,30,30,7,6,11,6,7,24,6,30,26,12,30,19,12,1],"z":["fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables","fresh vegetables"],"mode":"markers","text":["order id: 502283","order id: 284258","order id: 2661420","order id: 2353189","order id: 2165355","order id: 559932","order id: 1975360","order id: 2642501","order id: 1087606","order id: 2133334","order id: 1521067","order id: 3228748","order id: 2097917","order id: 1859600","order id: 557733","order id: 763657","order id: 176643","order id: 3401127","order id: 2842892","order id: 970974","order id: 3104587","order id: 2615099","order id: 2004282","order id: 2623242","order id: 2663702","order id: 1989592","order id: 1942305","order id: 812782","order id: 1970265","order id: 1948554","order id: 1576281","order id: 2087852","order id: 910109","order id: 639211","order id: 3323761","order id: 431174","order id: 2007882","order id: 3120314","order id: 3184597","order id: 2796068","order id: 1139695","order id: 400021","order id: 1944294","order id: 2305162","order id: 2839421","order id: 2079144","order id: 2966331","order id: 843692","order id: 2124934","order id: 734750","order id: 2801127","order id: 1455744","order id: 1343941","order id: 538394","order id: 658815","order id: 108797","order id: 873983","order id: 427405","order id: 2815520","order id: 225404","order id: 2448840","order id: 3022991","order id: 1233616","order id: 1795505","order id: 2200763","order id: 3080791","order id: 3228870","order id: 221317","order id: 2511575","order id: 2265411","order id: 1785661","order id: 2993339","order id: 1575746","order id: 2921943","order id: 1267794","order id: 260832","order id: 2563565","order id: 2985571","order id: 1393497","order id: 1398035","order id: 1205716","order id: 2815034","order id: 1025193","order id: 711432","order id: 1973387","order id: 880809","order id: 1439477","order id: 3027101","order id: 3069904","order id: 2032879","order id: 743838","order id: 2115344","order id: 963755","order id: 2564051","order id: 3364387","order id: 2851486","order id: 2396438","order id: 2404609","order id: 223214","order id: 756176","order id: 1757393","order id: 2563912","order id: 3040125","order id: 1442013","order id: 961147","order id: 1527190","order id: 480184","order id: 807448"],"type":"scatter3d","name":"fresh vegetables","marker":{"color":"rgba(33,144,141,0.8)","size":[55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55],"sizemode":"area","line":{"color":"rgba(33,144,141,1)"}},"textfont":{"color":"rgba(33,144,141,0.8)","size":55},"error_y":{"color":"rgba(33,144,141,0.8)","width":55},"error_x":{"color":"rgba(33,144,141,0.8)","width":55},"line":{"color":"rgba(33,144,141,0.8)","width":55},"frame":null},{"x":["Hass Avocados","Cauliflower Florets","Packaged Grape Tomatoes","Vegetable Tray With Low Fat Dressing","Packaged Grape Tomatoes","Raspberries","Baby Cucumbers","Hass Avocados","Rainbow Bell Peppers"],"y":[9,6,0,30,18,28,14,8,12],"z":["packaged produce","packaged produce","packaged produce","packaged produce","packaged produce","packaged produce","packaged produce","packaged produce","packaged produce"],"mode":"markers","text":["order id: 1513372","order id: 2533903","order id: 1469108","order id: 2256293","order id: 1686917","order id: 1895100","order id: 16349","order id: 3319199","order id: 2074603"],"type":"scatter3d","name":"packaged produce","marker":{"color":"rgba(93,200,99,0.8)","size":[55,55,55,55,55,55,55,55,55],"sizemode":"area","line":{"color":"rgba(93,200,99,1)"}},"textfont":{"color":"rgba(93,200,99,0.8)","size":55},"error_y":{"color":"rgba(93,200,99,0.8)","width":55},"error_x":{"color":"rgba(93,200,99,0.8)","width":55},"line":{"color":"rgba(93,200,99,0.8)","width":55},"frame":null},{"x":["Organic Raspberries","Whole White Mushrooms","Organic Romaine","Red Raspberries","Whole White Mushrooms","Sweet Apple Slices","Organic Baby Rainbow Carrots","Leafy Green Romaine Lettuce","Organic Peeled Whole Baby Carrots","Organic Baby Spinach","Organic Sweet Pea","Baby Spinach","Organic Baby Spinach","Organic Grape Tomatoes","Pepper Greens","Organic Baby Carrots","Romaine Hearts","Organic Grape Tomatoes","Organic Baby Spinach","Fresh Spinach","Organic Baby Spinach","Seedless Red Grapes","Organic Peeled Whole Baby Carrots","Celery Heart","Peeled Shallots","Organic Baby Carrots","Mini Cucumbers","Organic Baby Carrots","Organic Baby Spinach","Organic Baby Spinach","Organic Baby Bella Mushrooms","Organic Baby Spinach","Organic Blueberries","Organic Cherries","Organic Blueberries","Organic Baby Spinach","Pomegranate Arils","Spinach and Arugula Salad","Lemon","Organic Blueberries","Baby Spinach","Shredded Iceberg Lettuce","Organic Peeled Whole Baby Carrots","Super Spinach! Baby Spinach, Baby Bok Choy, Sweet Baby Kale","Baby Spring Mix","Organic Raspberries","Organic Green Seedless Grapes","Organic Raspberries","Organic Baby Arugula","Organic Premium Sweet Petite Mini Peeled Carrots"],"y":[30,4,7,24,30,4,7,5,14,30,30,7,7,0,11,7,30,12,19,7,30,6,24,13,17,28,30,20,10,16,30,17,30,30,13,5,6,18,2,8,10,10,9,30,30,7,22,3,14,4],"z":["packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits","packaged vegetables fruits"],"mode":"markers","text":["order id: 3364747","order id: 1287544","order id: 2264475","order id: 2888899","order id: 1483248","order id: 63889","order id: 2759826","order id: 676463","order id: 2897036","order id: 3123519","order id: 424513","order id: 1102901","order id: 2102969","order id: 1104263","order id: 2540218","order id: 2232942","order id: 3288417","order id: 2957645","order id: 1786805","order id: 1228067","order id: 1321593","order id: 1270753","order id: 160703","order id: 2388197","order id: 2810520","order id: 406500","order id: 1970135","order id: 2510835","order id: 889537","order id: 1454759","order id: 3347763","order id: 1669821","order id: 135821","order id: 344259","order id: 2253020","order id: 2381858","order id: 1386752","order id: 809518","order id: 1849230","order id: 3152652","order id: 1645442","order id: 854318","order id: 663916","order id: 600763","order id: 2800956","order id: 1596448","order id: 1616076","order id: 3221666","order id: 2613326","order id: 2405700"],"type":"scatter3d","name":"packaged vegetables fruits","marker":{"color":"rgba(253,231,37,0.8)","size":[55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55],"sizemode":"area","line":{"color":"rgba(253,231,37,1)"}},"textfont":{"color":"rgba(253,231,37,0.8)","size":55},"error_y":{"color":"rgba(253,231,37,0.8)","width":55},"error_x":{"color":"rgba(253,231,37,0.8)","width":55},"line":{"color":"rgba(253,231,37,0.8)","width":55},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
