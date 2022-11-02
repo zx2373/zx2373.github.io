@@ -8,7 +8,7 @@ output:
 
 My Name is Ziyan Xu. I'm currently a second year MS Biostatistics student at Columbia University, mailman school of public health.
 
-![](images/ZiyanXu.JPG)
+![](images/ZiyanXu.JPG style="width:50") 
 
 ## About me
 I obtained my BS in Biology from MInzu University of China. With a strong background in biology, I'm currently studying Biostatistics which I'm passionate about. I love data analysis, my career goal is to become a Biostatistician who performs data analysis in healthcare field or a data scientisit in any other fields. Also, I have strong knowledge in healthcare investment. More details about my experience can be found [here](Resume_Ziyan_Xu.pdf).
